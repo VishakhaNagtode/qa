@@ -1,0 +1,61 @@
+package com.amazon.automation;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class AmazonTest {
+
+    WebDriver driver;
+
+    @BeforeClass
+    public void setUp() {
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://www.amazon.com/");
+    }
+
+    @Test(priority = 1)
+    public void login() {
+        // Add login steps here if you have login credentials.
+        // This example assumes you are bypassing login for simplicity.
+        // driver.findElement(By.id("nav-link-accountList")).click();
+        // driver.findElement(By.id("ap_email")).sendKeys("your-email@example.com");
+        // driver.findElement(By.id("continue")).click();
+        // driver.findElement(By.id("ap_password")).sendKeys("your-password");
+        // driver.findElement(By.id("signInSubmit")).click();
+    }
+
+    @Test(priority = 2)
+    public void searchProduct() {
+        WebElement searchBox = driver.findElement(By.id("twotabsearchtextbox"));
+        searchBox.sendKeys("laptop");
+        searchBox.submit();
+    }
+
+    @Test(priority = 3)
+    public void getProductDetails() {
+        WebElement firstProduct = driver.findElement(By.cssSelector("div.s-main-slot div.s-result-item"));
+        String productName = firstProduct.findElement(By.cssSelector("h2 a span")).getText();
+        String productPrice = firstProduct.findElement(By.cssSelector("span.a-price-whole")).getText();
+
+        // Printing product details
+        System.out.println("Product Name: " + productName);
+        System.out.println("Product Price: " + productPrice);
+
+        // Assert product details to validate
+        Assert.assertNotNull(productName);
+        Assert.assertNotNull(productPrice);
+    }
+
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
+    }
+}
